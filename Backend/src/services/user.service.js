@@ -1,8 +1,7 @@
-import {PrismaClient} from "@prisma/client";
 import { hash } from 'bcrypt';
-const prisma = new PrismaClient();
+import prisma from "../config/dbconfig.js";
 
-export async function resgisterUser(userData){
+export async function resgisterUserService(userData){
     const { username, email, password } = userData;
 
     const existingUser = await prisma.user.findUnique({

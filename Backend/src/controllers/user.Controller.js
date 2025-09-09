@@ -1,9 +1,9 @@
-import { resgisterUser } from '../services/user.service.js';
+import { resgisterUserService } from '../services/user.service.js';
 
-const registerUser = async (req,res,next) =>{
+export const registerUser = async (req,res,next) =>{
     try{
          const userData = req.body;
-         const newUser = await resgisterUser(userData);
+         const newUser = await resgisterUserService(userData);
 
          res.status(201)
             .json({ message: 'User registered successfully', data: newUser });
@@ -12,5 +12,3 @@ const registerUser = async (req,res,next) =>{
         next(error);
     }
 }
-
-export { registerUser };
