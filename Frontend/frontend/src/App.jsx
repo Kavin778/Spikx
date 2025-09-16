@@ -1,14 +1,17 @@
 import Sidebar from "./components/Sidebar"
+import VideoPlayer from "./components/VideoPlayer";
 import HomePage from "./pages/HomePage"
+import MoviePage from "./pages/MoviePage";
 
 function App() {
 
   return (
-    <div className="bg-gray-900">
+    <div className="bg-black">
       <Sidebar />
-      <main>
+      {/* <main>
         <HomePage />
-      </main>
+      </main> */}
+      <MoviePage/>
     </div>
   );
 }

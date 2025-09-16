@@ -1,68 +1,71 @@
-import { PlayIcon } from "@heroicons/react/16/solid";
-import { getMovieImages,getMovieGenres } from "../api/MoviesService";
-import { useEffect, useState } from "react";
+import { PlayIcon } from '@heroicons/react/16/solid';
+import { getMovieImages, getMovieGenres } from '../api/MoviesService';
+import { useEffect, useState } from 'react';
 
 const HeroBanner = ({ movieData }) => {
-
   const [logoPath, setLogoPath] = useState(null);
   const [genres, setGenres] = useState([]);
   const backdropPath = import.meta.env.VITE_TMDB_ORIGINAL_IMAGE_BASE_URL + movieData.backdrop_path;
 
-  useEffect(()=>{
-    const fetchLogos = async()=>{
-      try{
-        if(movieData && movieData.id){
-          const logos = await getMovieImages(movieData.id,movieData.media_type);
+  useEffect(() => {
+    const fetchLogos = async () => {
+      try {
+        if (movieData && movieData.id) {
+          const logos = await getMovieImages(movieData.id, movieData.media_type);
           const getgenres = await getMovieGenres(movieData.media_type);
           setGenres(getgenres);
-          if(logos.length>0){
-            const enLogo = logos.find(logo => logo.iso_639_1 === "en");
-            setLogoPath(import.meta.env.VITE_TMDB_ORIGINAL_IMAGE_BASE_URL+ enLogo.file_path);
-          }
-          else{
+          if (logos.length > 0) {
+            const enLogo = logos.find(logo => logo.iso_639_1 === 'en');
+            setLogoPath(import.meta.env.VITE_TMDB_ORIGINAL_IMAGE_BASE_URL + enLogo.file_path);
+          } else {
             setLogoPath(null);
           }
-        } 
-
-      }
-      catch(error){
-        console.error("Error fetching logos:",error);
+        }
+      } catch (error) {
+        console.error('Error fetching logos:', error);
         setLogoPath(null);
-    }
-  }
-  fetchLogos();
-},[movieData?.id])
-  const genreMap = new Map(genres.map(g => [g.id,g.name]));
+      }
+    };
+    fetchLogos();
+  }, [movieData?.id]);
+  const genreMap = new Map(genres.map(g => [g.id, g.name]));
 
-  const movieGenres = movieData.genre_ids.map(id=>genreMap.get(id)).join(" | ");
+  const movieGenres = movieData.genre_ids.map(id => genreMap.get(id)).join(' | ');
 
   let releaseDate;
-  if(movieData.media_type ==="tv"){
-     releaseDate= movieData.first_air_date;
+  if (movieData.media_type === 'tv') {
+    releaseDate = movieData.first_air_date;
   }
-  if(movieData.media_type ==="movie"){
-     releaseDate= movieData.release_date;
+  if (movieData.media_type === 'movie') {
+    releaseDate = movieData.release_date;
   }
 
   return (
-    <div className="w-full h-[80vh] mb-6 p-1 relative font-bold">
+    <div className="w-full h-[80vh] relative font-bold">
       <img
         src={backdropPath}
         alt={movieData.title || movieData.name}
         className="w-full h-full object-cover brightness-80"
       />
-      <div className="absolute bottom-4 left-4 text-white text-center p-2 w-96 space-y-2 bg-opacity-50 rounded-lg flex flex-col items-start">
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+      <div className="absolute bottom-4 left-4 text-white p-4 w-96 space-y-3 flex flex-col items-start">
         <img
           src={logoPath}
           alt={movieData.title || movieData.name}
-          className="w-auto max-h-24 object-contain"
+          className="w-auto max-h-24 object-contain mb-4"
         />
-        <h6 className="text-md mt-2 text-start">{releaseDate.slice(0,4)} | {movieData.vote_average.toFixed(1)}</h6>
-        <p className="text-md mt-2 text-start p-control">{movieData.overview}</p>
-        <p className="text-md mt-2 text-start">{movieGenres}</p>
+        <div className="flex items-center space-x-4 text-lg">
+          <span>{releaseDate.slice(0, 4)}</span>
+          <span> | </span>
+          <span>{movieData.vote_average.toFixed(1)}</span>
+          <span> | </span>
+          <span className="capitalize">{movieData.media_type}</span>
+        </div>
+        <p className="text-base leading-relaxed line-clamp-3 max-w-lg">{movieData.overview}</p>
+        <span className="text-md mt-2 text-start text-green-600">{movieGenres}</span>
         <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-xl flex items-center gap-2 transition-colors duration-200 mt-4">
-            <PlayIcon className="size-6 text-white inline-block" />
-            Watch Now
+          <PlayIcon className="size-6 text-white inline-block" />
+          Watch Now
         </button>
       </div>
     </div>
