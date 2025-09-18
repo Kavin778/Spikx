@@ -45,10 +45,12 @@ const HeroBanner = ({ movieData }) => {
       <img
         src={backdropPath}
         alt={movieData.title || movieData.name}
-        className="w-full h-full object-cover brightness-80"
+        className="w-full h-full object-cover brightness-100"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-      <div className="absolute bottom-4 left-4 text-white p-4 w-96 space-y-3 flex flex-col items-start">
+      <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+      <div className="absolute bottom-4 left-4 text-white p-2 w-96 space-y-3 flex flex-col items-start">
         <img
           src={logoPath}
           alt={movieData.title || movieData.name}
@@ -62,7 +64,7 @@ const HeroBanner = ({ movieData }) => {
           <span className="capitalize">{movieData.media_type}</span>
         </div>
         <p className="text-base leading-relaxed line-clamp-3 max-w-lg">{movieData.overview}</p>
-        <span className="text-md mt-2 text-start text-green-600">{movieGenres}</span>
+        <span className="text-md mt-2 text-star">{movieGenres}</span>
         <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-xl flex items-center gap-2 transition-colors duration-200 mt-4">
           <PlayIcon className="size-6 text-white inline-block" />
           Watch Now

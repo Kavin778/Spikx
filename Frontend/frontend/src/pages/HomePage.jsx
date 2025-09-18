@@ -21,13 +21,17 @@ const HomePage = () => {
         return <p className="text-green-500">Loading...</p>
     }
 
-    return(
-        <div className="min-h-screen ml-20 p-2">
-            <HeroList movieData={trendingMovies}/>
-            <MovieList title="Popular Movies" movies={trendingMovies}/>
-            <MovieList title="Top Rated Movies" movies={topRatedMovies}/>
+    return (
+      <div className="min-h-screen bg-black ">
+        <div className="ml-10">
+          <HeroList movieData={trendingMovies} />
         </div>
-    )
+        <div className="min-h-screen bg-black ">
+          <MovieList title="Popular Movies" movies={trendingMovies} />
+          <MovieList title="Top Rated Movies" movies={topRatedMovies} />
+        </div>
+      </div>
+    );
 }
 
 export default HomePage;
