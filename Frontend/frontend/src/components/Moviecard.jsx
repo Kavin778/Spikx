@@ -11,8 +11,8 @@ const Moviecard = ({movieData}) => {
         className="w-full h-full object-cover rounded-md group-hover:brightness-75"
       />
       <div className="absolute bottom-0 left-0 right-0 p-4 flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-        <button className="bg-slate-400 hover:bg-slate-200 group-hover:text-black text-white font-bold py-3 px-8 rounded-lg flex items-center gap-2 transition-colors duration-200">
-          <PlayIcon className="size-5 text-white hover:text-black inline-block" />
+        <button className="bg-slate-400 hover:bg-slate-200 hover:text-black group text-white font-bold py-3 px-8 rounded-lg flex items-center gap-2 transition-colors duration-200">
+          <PlayIcon className="size-5 inline-block hover:text-black transition duration-200" />
           Play Now
         </button>
       </div>

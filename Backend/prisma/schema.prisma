@@ -29,6 +29,7 @@ model Room{
   tmdbId    String    @unique
   creatorId String
   creator   User      @relation(fields:[creatorId],references:[id])
+  isOnline  Boolean   @default(true)
   createdAt DateTime  @default(now())
 }
 

@@ -1,6 +1,15 @@
 import axios from "axios";
-import {createMoviesService,getMovieByIdService} from "../services/movies.service.js";
+import {
+  createMoviesService,
+  getMovieByIdService,
+  getMovieByTmdbIdService,
+} from "../services/movies.service.js";
 import { LocalIpAddress } from "../config/ipconfig.js";
+import {
+  getMovieImagesService,
+  getMovieCastCrewService,
+  getMovieTmdbService,
+} from "../services/tmdb.service.js";
 
 export const createMovies = async (req, res, next) => {
   try {
@@ -10,6 +19,34 @@ export const createMovies = async (req, res, next) => {
     res
       .status(201)
       .json({ message: "Movie created successfully", data: newMovie });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getMovieByTmdb = async (req, res, next) => {
+  try {
+    const tmdbId = req.params.id;
+    const moviedb = await getMovieByTmdbIdService(tmdbId);
+
+    const images = await getMovieImagesService(tmdbId, moviedb?.type || "movie");
+
+    const details = await getMovieTmdbService(tmdbId);
+
+    const castCrew = await getMovieCastCrewService(tmdbId,moviedb?.type || "movie");
+
+    const movie = {
+      movieId: moviedb?.id || null,
+      details,
+      backdrops: images.backdrops,
+      posters: images.posters,
+      logos: images.logos,
+      cast: castCrew.cast,
+      crew: castCrew.crew,
+      mediaType: moviedb?.type || "movie",
+    };
+
+    res.status(200).json({ message: "Movie fetched successfully", movie });
   } catch (error) {
     next(error);
   }
@@ -29,7 +66,6 @@ export const getMovie = async (req, res, next) => {
     const apikey = process.env.JELLYFIN_API_KEY;
     const jellyUrl = `http://${ip}:${jellyPort}/Videos/${movie.jellyfinItemId}/stream.mp4?api_key=${apikey}&static=true`;
 
-
     const axiosConfig = {
       method: "get",
       url: jellyUrl,
@@ -39,11 +75,10 @@ export const getMovie = async (req, res, next) => {
     if (range) {
       axiosConfig.headers.Range = range;
     }
-    const response =await axios(axiosConfig);
+    const response = await axios(axiosConfig);
     res.writeHead(response.status, response.headers);
     response.data.pipe(res);
-  } 
-  catch (error) {
+  } catch (error) {
     next(error);
   }
 };

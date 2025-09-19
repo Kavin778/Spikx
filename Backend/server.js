@@ -15,6 +15,13 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 const server = http.createServer(app);
+
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 const io = new Server(server,{
   cors:{
     origin: "*",
@@ -22,11 +29,8 @@ const io = new Server(server,{
   }
 });
 
-app.use(cors(
-  {origin: "*", // Allow requests from any origin
-  methods: ["GET","POST","PUT","DELETE"], // Allow specific HTTP methods
-  credentials: true // Allow cookies and credentials
-}));
+
+
 app.use(express.json());
 
 app.use('/api/users', userRoutes);

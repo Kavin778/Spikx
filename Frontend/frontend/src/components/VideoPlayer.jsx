@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { PlayIcon } from '@heroicons/react/24/outline';
-import { FaceSmileIcon } from '@heroicons/react/24/solid';
 
 const VideoPlayer = ({ isChatVisible, movieData }) => {
   const [canPlay, setCanPlay] = useState(false);
-  const url = `http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4`;
-  const logoPath = `https://image.tmdb.org/t/p/original/e81YnyUwNs9YO8ljpPMMjrzHsgM.png`;
+  const baseUrl = import.meta.env.VITE_NODE_BASE_URL;
+  const logoBaseUrl = import.meta.env.VITE_TMDB_ORIGINAL_IMAGE_BASE_URL;
+  const movieUrl = `${baseUrl}/movies/getMovie/${movieData.id}`;
+  const logoPath = `${logoBaseUrl}${movieData.logos[0].file_path}`;
+  const backdropUrl = `${logoBaseUrl}${movieData.backdrops[0].file_path}`;
+  
   return (
     <div
       className={`h-[85vh] flex rounded-xl items-center justify-center relative bg-black  transition-all duration-300 ${isChatVisible ? 'w-[70%]' : 'w-auto'} `}
@@ -18,13 +21,13 @@ const VideoPlayer = ({ isChatVisible, movieData }) => {
             autoPlay={false}
             muted
           >
-            <source src={url} type="video/mp4" />
+            <source src={movieUrl} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         ) : (
           <img
-            src="https://image.tmdb.org/t/p/original/vgnoBSVzWAV9sNQUORaDGvDp7wx.jpg"
-            alt=""
+            src={backdropUrl}
+            alt={movieData.title}
             className="w-full h-full object-cover rounded-xl brightness-100 transition-all duration-300 "
           />
         )}
@@ -32,25 +35,24 @@ const VideoPlayer = ({ isChatVisible, movieData }) => {
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/20 pointer-events-none rounded-2xl" />
         ) : (
           <div>
-            <div className="absolute inset-0 bg-gradient-to-b from-black via-transparent to-transparent pointer-events-none rounded-2xl" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-transparent to-transparent pointer-events-none rounded-2xl" />
             <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent pointer-events-none rounded-2xl" />
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none rounded-2xl" />
           </div>
         )}
         {!canPlay && (
           <div
-            className={`absolute bottom-6 left-6 text-white p-4 space-y-6 flex flex-col items-start ${isChatVisible ? 'w-fit' : 'w-auto'}`}
+            className={`absolute bottom-6 left-6 text-white p-4 space-y-6 flex flex-col items-start ${isChatVisible ? 'w-fit' : 'w-fit'}`}
           >
             <img
               src={logoPath}
-              alt="hello"
-              className={`w-auto object-contain mb-4 ${isChatVisible ? 'max-h-24' : 'max-h-32'} transition-all duration-300`}
+              alt={movieData.title}
+              className={`w-fit object-contain mb-4 ${isChatVisible ? 'max-h-24' : 'max-h-32'} transition-all duration-300`}
             />
             <p
               className={`text-lg leading-relaxed font-semibold line-clamp-3 transition duration-300 ${isChatVisible ? 'max-w-64' : 'max-w-lg'}`}
             >
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua.
+              {movieData.tagline}
             </p>
             <button
               className={`bg-slate-400 hover:bg-slate-200 text-lg hover:text-black text-white font-bold rounded-xl  items-center gap-2 transition-all duration-300  ${isChatVisible ? 'py-2 px-4 text-md w-48' : 'py-3 px-8 w-64'}`}
