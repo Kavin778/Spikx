@@ -1,13 +1,58 @@
-import { createRoomService } from "../services/room.service.js";
+import {
+  createRoomService,
+  getRoomsService,
+  joinRoomService,
+} from "../services/room.service.js";
 
 export const createRoom = async (req, res, next) => {
   try {
-    const roomData = req.body;
+    const data = req.body;
+    const userId = req.userId;
+
+    const roomData = {
+      creatorId: userId,
+      name:data.name,
+      isPublic:data.isPublic,
+      password:data.password,
+      currentMovieId:data.currentMovieId
+    }
     const newRoom = await createRoomService(roomData);
 
+    console.log(newRoom);
+    if (!newRoom.success) {
+      return res.status(newRoom.status).json({ message: newRoom.message });
+    }
     res
       .status(201)
       .json({ message: "Room created successfully", data: newRoom });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getRooms = async (req, res, next) => {
+  try {
+    const rooms = await getRoomsService();
+    if (!rooms.success) {
+      return res.status(rooms.status).json({ message: rooms.message });
+    }
+
+    res.status(200).json({ message: "Rooms Fetched Successfully" }, rooms);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const joinRoom = async (req, res, next) => {
+  try {
+    const roomData = req.body;
+
+    const room = await joinRoomService(roomData);
+    if (!room.success) {
+      return res.status(room.status).json({ message: room.message });
+    }
+
+    res.status(200).json({ message: "Succesfullt joined the room" });
   } catch (error) {
     next(error);
   }

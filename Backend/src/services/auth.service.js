@@ -48,7 +48,6 @@ export async function refreshTokenService(refreshToken) {
   if (!payload) {
     return { success: false, status: 403, message: "Invalid refresh token" };
   }
-  console.log(payload)
 
   const hashedRefreshToken = hashToken(refreshToken);
 

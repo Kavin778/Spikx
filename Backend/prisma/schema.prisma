@@ -31,6 +31,8 @@ model Room{
   currentMovieId  String
   currentMovie    Movies    @relation(fields:[currentMovieId],references:[id])
   isOnline        Boolean   @default(true)
+  isPublic        Boolean   @default(false)
+  password        String?
   createdAt       DateTime  @default(now())
 }
 
@@ -39,7 +41,7 @@ model Movies{
   title           String
   type            String
   tmdbId          String    @unique
-  jellyfinItemId  String   @unique
+  jellyfinItemId  String    @unique
   createdAt       DateTime  @default(now())
   rooms           Room[]
 }
