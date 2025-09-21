@@ -1,18 +1,20 @@
 import Chat from "./components/Chat";
 import Navbar from "./components/Navbar";
+import AuthPage from "./pages/AuthPage";
 import HomePage from "./pages/HomePage"
 import MoviePage from "./pages/MoviePage";
 
 function App() {
 
   return (
-    <div className="bg-black min-h-screen">
-      <Navbar />
+    <div className="bg-white min-h-screen">
+      {/* <Navbar /> */}
       {/* <main>
         <HomePage />
       </main> */}
-      <MoviePage/>
+      {/* <MoviePage/> */}
       {/* <Chat /> */}
+      <AuthPage/>
     </div>
   );
 }
