@@ -20,17 +20,18 @@ model User{
   password  String
   createdAt DateTime  @default(now())
   rooms     Room[]
+  sessions  Sessions[]
 }
 
 model Room{
-  id        String    @id @default(cuid())
-  name      String  
-  videoId   String?   @unique
-  tmdbId    String    @unique
-  creatorId String
-  creator   User      @relation(fields:[creatorId],references:[id])
-  isOnline  Boolean   @default(true)
-  createdAt DateTime  @default(now())
+  id              String    @id @default(cuid())
+  name            String  
+  creatorId       String
+  creator         User      @relation(fields:[creatorId],references:[id])
+  currentMovieId  String
+  currentMovie    Movies    @relation(fields:[currentMovieId],references:[id])
+  isOnline        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
 }
 
 model Movies{
@@ -38,6 +39,17 @@ model Movies{
   title           String
   type            String
   tmdbId          String    @unique
-  jellyfinItemId  String?   @unique
+  jellyfinItemId  String   @unique
+  createdAt       DateTime  @default(now())
+  rooms           Room[]
+}
+
+model Sessions{
+  id              String    @id @default(cuid())
+  refreshToken    String    @unique
+  expiresAt       DateTime
+  userId          String 
+  user            User      @relation(fields:[userId],references:[id],onDelete:Cascade)
   createdAt       DateTime  @default(now())
 }
+

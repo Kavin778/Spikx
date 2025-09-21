@@ -1,6 +1,10 @@
 import Router from "express";
-const router = Router();
 import { getMovieGenres,getMovieLogo,getTrendingMovies,getTopRatedMovies,getMovieCastCrew } from "../controllers/tmdb.Controller.js";
+import { authHandler } from "../middleware/authHandler.js";
+
+const router = Router();
+
+router.use(authHandler)
 
 router.get('/trending',getTrendingMovies);
 router.get('/top-rated',getTopRatedMovies);

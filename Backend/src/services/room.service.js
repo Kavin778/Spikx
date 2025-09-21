@@ -1,14 +1,21 @@
 import prisma from "../config/dbconfig.js";
 
 export async function createRoomService(roomData) {
-  const { name, videoId, tmdbId, creatorId } = roomData;
+  const { name,creatorId ,currentMovieId} = roomData;
 
   const newRoom = await prisma.room.create({
     data: {
       name,
-      videoId,
-      tmdbId,
-      creatorId,
+      creator:{
+        connect:{
+          id:creatorId
+        },
+      },
+      currentMovie:{
+        connect:{
+          id:currentMovieId
+        },
+      }
     },
   });
 

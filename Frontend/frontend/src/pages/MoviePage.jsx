@@ -3,7 +3,7 @@ import MovieInfo from '../components/MovieInfo';
 import VideoPlayer from '../components/VideoPlayer';
 import { getMovieDetails } from '../api/MoviesService';
 
-const MoviePage = ({ tmdbId = 91314 }) => {
+const MoviePage = ({ tmdbId = 157336,watchParty=true }) => {
   const [isChatEnabled, setIsChatEnabled] = useState(false);
 
   const handleChatEnable = enabled => {
@@ -56,7 +56,7 @@ const MoviePage = ({ tmdbId = 91314 }) => {
       <div>
         <MovieInfo
           movieData={movieInfos}
-          isWatchParty={true}
+          isWatchParty={watchParty}
           onEnableChat={handleChatEnable}
           isChatEnable={isChatEnabled}
         />

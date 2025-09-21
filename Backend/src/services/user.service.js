@@ -1,5 +1,6 @@
 import { hash } from "bcrypt";
 import prisma from "../config/dbconfig.js";
+import ConnectionParameters from "pg/lib/connection-parameters";
 
 export async function resgisterUserService(userData) {
   const { username, email, password } = userData;
@@ -24,4 +25,14 @@ export async function resgisterUserService(userData) {
 
   delete newUser.password;
   return newUser;
+}
+
+export async function getUserService(email){
+  const user = await prisma.user.findUnique({
+    where:{
+      email:email
+    }
+  })
+
+  return user;
 }

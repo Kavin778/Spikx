@@ -13,7 +13,7 @@ const MovieInfo = ({ movieData, isWatchParty, onEnableChat, isChatEnable }) => {
       <div className="flex-1 p-2 overflow-hidden">
         <div className="flex items-center mb-6">
           <h1 className="text-5xl font-bold text-white uppercase">{movieData.title}</h1>
-          {isWatchParty && isChatEnable ? (
+          {isWatchParty ?isChatEnable ? (
             <button
               onClick={() => onEnableChat?.(false)}
               className="bg-slate-400 hover:bg-slate-200 ml-8 hover:text-black text-white font-bold py-2 px-6  rounded-lg transition-colors duration-200 flex items-center gap-2"
@@ -29,7 +29,7 @@ const MovieInfo = ({ movieData, isWatchParty, onEnableChat, isChatEnable }) => {
               <ChatBubbleLeftRightIcon className="size-6 hover:text-black inline-block" />
               Enable Chat
             </button>
-          )}
+          ) : null}
         </div>
         <div className="flex-1 text-white text-lg font-medium space-y-6">
           <div className="flex items-start space-x-2 text-lg ">

@@ -42,7 +42,7 @@ const VideoPlayer = ({ isChatVisible, movieData }) => {
         )}
         {!canPlay && (
           <div
-            className={`absolute bottom-6 left-6 text-white p-4 space-y-6 flex flex-col items-start ${isChatVisible ? 'w-fit' : 'w-fit'}`}
+            className={`absolute bottom-6 left-6 text-white p-4 space-y-6 flex flex-col items-start transition duration-300 ${isChatVisible ? 'w-md' :'w-xl'}`}
           >
             <img
               src={logoPath}
@@ -50,7 +50,7 @@ const VideoPlayer = ({ isChatVisible, movieData }) => {
               className={`w-fit object-contain mb-4 ${isChatVisible ? 'max-h-24' : 'max-h-32'} transition-all duration-300`}
             />
             <p
-              className={`text-lg leading-relaxed font-semibold line-clamp-3 transition duration-300 ${isChatVisible ? 'max-w-64' : 'max-w-lg'}`}
+              className={`text-md leading-relaxed font-semibold transition duration-300 ${isChatVisible ? 'w-md' : 'max-w-lg text-lg'}`}
             >
               {movieData.tagline}
             </p>
