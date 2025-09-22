@@ -1,9 +1,31 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LockClosedIcon,EnvelopeIcon } from '@heroicons/react/16/solid';
-
+import { loginService, setAccessToken } from '../../api/AuthService';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const {login} = useAuth()
+
+  const data = {
+    email:email,
+    password:password
+  }
+
+  const handleLogin = async (data)=>{
+    try{
+      const accessToken = await loginService(data);
+      console.log(accessToken)
+      login(accessToken)
+      setAccessToken(accessToken);
+      navigate("/home");
+    }
+    catch(error){
+      console.log("Login failed")
+    }
+  }
   return (
     <div className="bg-white/90 backdrop-blur-md p-8 rounded-2xl shadow-lg w-full max-w-md">
       <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Login</h2>
@@ -36,7 +58,7 @@ const Login = () => {
         </div>
       </div>
 
-      <button className="w-full bg-black text-white py-2 rounded-lg font-semibold hover:bg-black/70 transition duration-200">
+      <button onClick={()=>handleLogin(data)} className="w-full bg-black text-white py-2 rounded-lg font-semibold hover:bg-black/70 transition duration-200 cursor-pointer">
         Sign In
       </button>
 

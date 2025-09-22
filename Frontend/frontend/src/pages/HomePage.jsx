@@ -18,7 +18,11 @@ const HomePage = () => {
     fetchMovies();
   }, []);
   if (trendingMovies.length === 0 && topRatedMovies.length === 0) {
-    return <p className="text-green-500">Loading...</p>;
+    return (
+      <div className="min-h-screen bg-black flex justify-center items-center">
+        <h1 className="text-2xl font-bold">Loading...</h1>
+      </div>
+    );
   }
 
   return (

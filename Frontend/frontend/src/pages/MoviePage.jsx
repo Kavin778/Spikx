@@ -22,7 +22,7 @@ const MoviePage = ({ tmdbId = 157336,watchParty=true }) => {
 
   if (!movieDetails) {
     return (
-      <div className="min-h-screen flex justify-center items-center">
+      <div className="bg-black min-h-screen flex justify-center items-center">
         <p className="text-white text-xl font-bold">...Loading...</p>;
       </div>
     );
