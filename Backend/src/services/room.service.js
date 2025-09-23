@@ -2,7 +2,7 @@ import prisma from "../config/dbconfig.js";
 import bcrypt from "bcrypt";
 
 export async function createRoomService(roomData) {
-  const { name, creatorId, isPublic, password, currentMovieId } = roomData;
+  const { name, creatorId, isPublic, password, currentMovieId,description } = roomData;
   console.log(roomData)
   let hashedPassword = null;
   if (!isPublic) {
@@ -23,6 +23,7 @@ export async function createRoomService(roomData) {
       password:hashedPassword,
       creatorId,
       currentMovieId,
+      description
     },
   });
 
@@ -63,7 +64,9 @@ export async function joinRoomService(roomData) {
     },
   });
 
-  if (!room || !bcrypt.compare(roomData.password,room.password)) {
+  const isPassValid = bcrypt.compare(roomData.password,room.password)
+
+  if (!room || !isPassValid) {
     return { success: false, status: 401, message: "Invalid room or Password" };
   }
 

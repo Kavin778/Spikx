@@ -2,11 +2,12 @@ import jwt from "jsonwebtoken";
 import prisma from "../config/dbconfig.js";
 import { hashToken } from "../utils/hash.js";
 
-const refreshKey = process.env.REFRESH_TOKEN_SECRET_KEY
-const accessKey = process.env.ACCESS_TOKEN_SECRET_KEY
+
+const refreshKey = process.env.REFRESH_TOKEN_SECRET_KEY;
+const accessKey = process.env.ACCESS_TOKEN_SECRET_KEY;
 
 function generateAccessToken(user) {
-  return jwt.sign({ userId: user.id },accessKey , {
+  return jwt.sign({ userId: user.id }, accessKey, {
     expiresIn: "15m",
   });
 }
@@ -17,7 +18,7 @@ function generateRefreshToken(user) {
   });
 }
 
-export async function generateTokenandCookieService(res, user) {
+export async function generateTokenandCookieService( res,user) {
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
   const refreshTokenHash = hashToken(refreshToken);
@@ -43,10 +44,13 @@ export async function generateTokenandCookieService(res, user) {
 }
 
 export async function refreshTokenService(refreshToken) {
-  const payload = jwt.verify(refreshToken, refreshKey);
 
-  if (!payload) {
-    return { success: false, status: 403, message: "Invalid refresh token" };
+  let payload;
+  try{
+    payload = jwt.verify(refreshToken,refreshKey)
+  }
+  catch(error){
+    return { success: false, status: 401, message: "Invalid refresh token" };
   }
 
   const hashedRefreshToken = hashToken(refreshToken);
@@ -56,7 +60,7 @@ export async function refreshTokenService(refreshToken) {
   });
 
   if (!session || session.expiresAt < new Date()) {
-    return { success: false, status: 403, message: "Session expired" };
+    return { success: false, status: 401, message: "Session expired" };
   }
 
   const user = await prisma.user.findUnique({
@@ -65,19 +69,18 @@ export async function refreshTokenService(refreshToken) {
     },
   });
 
-
   const result = generateAccessToken(user);
 
   return { success: true, status: 200, accessToken: result };
 }
 
-export async function logoutServie(res,refreshToken){
-    const hashedRefreshToken = hashToken(refreshToken);
+export async function logoutServie(res, refreshToken) {
+  const hashedRefreshToken = hashToken(refreshToken);
 
-    await prisma.sessions.deleteMany({
-      where:{refreshToken:hashedRefreshToken}
-    })
+  await prisma.sessions.deleteMany({
+    where: { refreshToken: hashedRefreshToken },
+  });
 
-    res.clearCookie("refreshToken");
-    return {status:204,message:"Logout Success"}
+  res.clearCookie("refreshToken");
+  return { status: 204, message: "Logout Success" };
 }

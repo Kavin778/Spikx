@@ -7,7 +7,9 @@ export const login = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await getUserService(email);
 
-    if (email !== user.email || !bcrypt.compare(user.password, password)) {
+    const isPasswordValid = await bcrypt.compare(password,user.password)
+
+    if (!user || !isPasswordValid) {
       return res.status(401).json({ message: "Invalid Credentials" });
     }
 
@@ -22,7 +24,6 @@ export const login = async (req, res, next) => {
 export const refresh = async (req, res, next) => {
   try {
     const {refreshToken} = req.cookies;
-
     if (!refreshToken)
       return res.status(401).json({ message: "Invalid Credentials" });
     
@@ -35,7 +36,7 @@ export const refresh = async (req, res, next) => {
     res.status(200).json({ message: "Session created", accessToken:result.accessToken });
 
   } catch (error) {
-    next(error);
+    next(error);  
   }
 };
 

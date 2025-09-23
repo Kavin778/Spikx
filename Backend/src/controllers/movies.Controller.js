@@ -28,12 +28,15 @@ export const getMovieByTmdb = async (req, res, next) => {
   try {
     const tmdbId = req.params.id;
     const moviedb = await getMovieByTmdbIdService(tmdbId);
+    const mediaType = moviedb?.type || "movie";
 
-    const images = await getMovieImagesService(tmdbId, moviedb?.type || "movie");
+    const promises = [
+      getMovieImagesService(tmdbId, mediaType),
+      getMovieTmdbService(tmdbId),
+      getMovieCastCrewService(tmdbId, mediaType),
+    ];
 
-    const details = await getMovieTmdbService(tmdbId);
-
-    const castCrew = await getMovieCastCrewService(tmdbId,moviedb?.type || "movie");
+    const [images,details,castCrew] = await Promise.all(promises);
 
     const movie = {
       movieId: moviedb?.id || null,
