@@ -17,7 +17,6 @@ const Login = () => {
   const handleLogin = async (data)=>{
     try{
       const accessToken = await loginService(data);
-      console.log(accessToken)
       login(accessToken)
       setAccessToken(accessToken);
       navigate("/home");

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { clearAccessToken, getAccessToken, refreshToken } from "../api/AuthService";
+import { clearAccessToken, getAccessToken, refreshToken, setAccessToken } from "../api/AuthService";
 
 const BASE_URL = import.meta.env.VITE_NODE_BASE_URL;
 
@@ -18,7 +18,7 @@ apiClient.interceptors.request.use(
         return config;
     },
     (error)=>{
-        Promise.reject(error)
+        return Promise.reject(error)
     }
 )
 
@@ -26,13 +26,12 @@ apiClient.interceptors.response.use(
     (response)=>response,
     async (error) =>{
         const originalRequest = error.config;
-        console.log(error.config)
         if(error.response?.status === 401 && !originalRequest._retry){
             originalRequest._retry = true;
 
             try{
                 const newAccessToken = await refreshToken();
-                console.log(newAccessToken)
+                setAccessToken(newAccessToken);
                 originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
                 return apiClient(originalRequest);
             }

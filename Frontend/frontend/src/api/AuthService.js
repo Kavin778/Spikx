@@ -17,7 +17,7 @@ export const getAccessToken = () => {
 
 export const register = async userData => {
   try {
-    const response = await axios.post(`${BASE_URL}/auth/register`, userData);
+    const response = await axios.post(`${BASE_URL}/users/register`, userData);
     return response.data.message;
   } catch (error) {
     console.log('Registration Failed');
@@ -26,9 +26,12 @@ export const register = async userData => {
 
 export const loginService = async userData => {
   try {
-    const response = await axios.post(`${BASE_URL}/auth/login`, userData);
+    const response = await axios.post(`${BASE_URL}/auth/login`, userData,{
+      withCredentials:true
+    });
     setAccessToken(response.data.accessToken);
     return response.data.accessToken;
+    
   } catch (error) {
     console.log('Login Failed');
   }
@@ -36,11 +39,9 @@ export const loginService = async userData => {
 
 export const refreshToken = async () => {
   try {
-    console.log("came to refreshservice")
     const response = await axios.post(`${BASE_URL}/auth/refresh`,{},{
       withCredentials:true
     })
-    console.log(response);
     setAccessToken(response.data.accessToken);
     return response.data.accessToken;
   } catch (error) {

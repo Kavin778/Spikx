@@ -17,3 +17,13 @@
       text-overflow: ellipsis;
     }
   }
+
+  @layer base{
+    html{
+      background-color: #000;
+    }
+    body{
+      background-color: #000;
+      min-height: 100vh;
+    }
+  }

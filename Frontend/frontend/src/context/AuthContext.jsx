@@ -34,12 +34,13 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.log('Logout error', error);
     }
-    clearAccessToken();
-    setIsAuthenticated(false);
+    finally{
+      clearAccessToken();
+      setIsAuthenticated(false);
+    }
   };
 
   const login = accessToken => {
-    console.log(accessToken);
     setIsAuthenticated(true);
   };
 

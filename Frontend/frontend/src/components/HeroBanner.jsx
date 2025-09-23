@@ -1,6 +1,7 @@
 import { PlayIcon } from '@heroicons/react/16/solid';
 import { getMovieImages, getMovieGenres } from '../api/MoviesService';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const HeroBanner = ({ movieData }) => {
   const [logoPath, setLogoPath] = useState(null);
@@ -28,6 +29,11 @@ const HeroBanner = ({ movieData }) => {
     };
     fetchLogos();
   }, [movieData?.id]);
+
+  const navigate = useNavigate();
+  const handlePlayClick=()=>{
+    navigate(`/movie/${movieData.id}?watchParty=false`)
+  }
   const genreMap = new Map(genres.map(g => [g.id, g.name]));
 
   const movieGenres = movieData.genre_ids.map(id => genreMap.get(id)).join(' | ');
@@ -41,11 +47,11 @@ const HeroBanner = ({ movieData }) => {
   }
 
   return (
-    <div className="w-full h-[80vh] relative font-bold">
+    <div className="w-full h-[80vh] relative font-bold transition-all duration-300">
       <img
         src={backdropPath}
         alt={movieData.title || movieData.name}
-        className="w-full h-full object-cover brightness-100"
+        className="w-full h-full object-cover brightness-100 transition-all duration-300"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-transparent to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent" />
@@ -54,9 +60,9 @@ const HeroBanner = ({ movieData }) => {
         <img
           src={logoPath}
           alt={movieData.title || movieData.name}
-          className="w-auto max-h-24 object-contain mb-4"
+          className="w-auto max-h-24 object-contain mb-4 transition-all duration-300"
         />
-        <div className="flex items-center space-x-4 text-lg">
+        <div className="flex items-center space-x-4 text-lg font-semibold transition-all duration-300">
           <span>{releaseDate.slice(0, 4)}</span>
           <span> | </span>
           <span>{movieData.vote_average.toFixed(1)}</span>
@@ -65,8 +71,8 @@ const HeroBanner = ({ movieData }) => {
         </div>
         <p className="text-base leading-relaxed line-clamp-3 max-w-lg">{movieData.overview}</p>
         <span className="text-md mt-2 text-star">{movieGenres}</span>
-        <button className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-xl flex items-center gap-2 transition-colors duration-200 mt-4">
-          <PlayIcon className="size-6 text-white inline-block" />
+        <button onClick={handlePlayClick} className="bg-slate-400 hover:bg-slate-200 w-58  justify-center hover:text-black group text-white font-bold py-3 px-8 rounded-xl flex items-center gap-2 transition-all duration-300 mt-4">
+          <PlayIcon className="size-6 text-white group-hover:text-black inline-block transition-all duration-300" />
           Watch Now
         </button>
       </div>

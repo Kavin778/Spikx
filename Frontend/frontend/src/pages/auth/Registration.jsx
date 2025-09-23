@@ -1,10 +1,30 @@
 import { useState } from 'react';
 import { LockClosedIcon, EnvelopeIcon,UserIcon } from '@heroicons/react/16/solid';
+import { register } from '../../api/AuthService';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
+  const navigate = useNavigate();
+
+  const data ={
+    email:email,
+    password:password,
+    username:username
+  }
+
+  const handleRegister = async ()=>{
+    try{
+      const response = await register(data)
+      console.log("Registration success:"+response)
+      navigate("/");
+    }
+    catch(error){
+      console.log("Registration failed");
+    }
+  }
   return (
     <div className="bg-white/90 backdrop-blur-md p-8 rounded-2xl w-full max-w-md">
       <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">Registration</h2>
@@ -51,8 +71,8 @@ const Register = () => {
         </div>
       </div>
 
-      <button className="w-full bg-black text-white py-2 rounded-lg font-semibold hover:bg-black/70 transition duration-200">
-        Sign In
+      <button onClick={()=>handleRegister(data)} className="w-full bg-black text-white py-2 rounded-lg font-semibold hover:bg-black/70 transition duration-200">
+        Register
       </button>
 
       <div className="flex items-center my-6">
@@ -63,7 +83,7 @@ const Register = () => {
 
       <p className="text-center text-sm text-gray-600">
         Already have an account?{' '}
-        <a href="/Login" className="text-green-800 font-semibold hover:underline">
+        <a href="/" className="text-green-800 font-semibold hover:underline">
           Login
         </a>
       </p>

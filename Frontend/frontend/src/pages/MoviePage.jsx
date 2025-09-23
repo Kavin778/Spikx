@@ -2,13 +2,20 @@ import { useEffect, useState } from 'react';
 import MovieInfo from '../components/MovieInfo';
 import VideoPlayer from '../components/VideoPlayer';
 import { getMovieDetails } from '../api/MoviesService';
+import { useParams, useSearchParams } from 'react-router-dom';
 
-const MoviePage = ({ tmdbId = 157336,watchParty=true }) => {
+const MoviePage = () => {
   const [isChatEnabled, setIsChatEnabled] = useState(false);
+
+  const {tmdbId} = useParams();
+  const [searchParams] = useSearchParams();
+  const watchParty = searchParams.get("watchParty") === "true";
+
 
   const handleChatEnable = enabled => {
     setIsChatEnabled(enabled);
   };
+
 
   const [movieDetails, setMovieDetails] = useState(null);
 

@@ -4,6 +4,9 @@ import ProtectedRoute from './ProtectedRoutes';
 import HomePage from '../pages/HomePage';
 import MoviePage from '../pages/MoviePage';
 import ErrorPage from '../pages/ErrorPage';
+import WatchPartyPage from '../pages/WatchPartyPage';
+import RoomCard from '../components/RoomCard';
+import RoomInfo from '../components/RoomInfo';
 
 const RoutePaths = () => {
   return (
@@ -19,7 +22,7 @@ const RoutePaths = () => {
         }
       />
       <Route
-        path="/movie"
+        path="/movie/:tmdbId"
         element={
           <ProtectedRoute>
             <MoviePage />
@@ -27,6 +30,9 @@ const RoutePaths = () => {
         }
       />
       <Route path="*" element={<ErrorPage />} />
+      <Route path='/watchparty' element={<WatchPartyPage/>}/>
+      <Route path='/card' element={<RoomCard/>}/>
+      <Route path='/roomInfo' element={<RoomInfo/>}/>
     </Routes>
   );
 };

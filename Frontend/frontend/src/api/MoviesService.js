@@ -1,5 +1,5 @@
 import axios from 'axios';
-import apiClient from '../interceptors/AxiosInterceptor';
+import apiClient from '../interceptors/AxiosInterceptor.js';
 
 const BASE_URL = import.meta.env.VITE_NODE_BASE_URL;
 

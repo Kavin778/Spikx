@@ -7,7 +7,7 @@ import {
   FilmIcon,
 } from '@heroicons/react/24/outline';
 import { useState, useEffect } from 'react';
-
+import { useAuth } from '../hooks/useAuth';
 const Navbar = () => {
   const navItems = [
     { name: 'Home', icon: HomeIcon, href: '#' },
@@ -18,6 +18,17 @@ const Navbar = () => {
 
   const [isScrolled, setIsScrolled] = useState(false);
 
+  const {logout} = useAuth();
+
+  const handleLogout = async ()=>{
+    try{
+      logout();
+    }
+    catch(error){
+      console.log("Logout failed")
+    }
+  }
+
   useEffect(()=>{
         const handleScroll = () =>{
             setIsScrolled(window.scrollY > 0);
@@ -27,7 +38,7 @@ const Navbar = () => {
   },[])
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-transparent max-w-8xl">
+    <nav className="fixed top-0 left-0 right-0 z-30 transition-all duration-300 bg-transparent max-w-8xl">
       <div
         className={`mx-10 px-4  ${isScrolled ? 'rounded-b-xl backdrop-blur-xl ' : 'bg-transparent'} transition-all duration-300`}
       >
@@ -53,7 +64,7 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center">
-            <button className="flex items-center px-3 py-2 rounded-md text-lg font-medium text-gray-300 hover:text-black hover:bg-slate-300 transition-all duration-200">
+            <button onClick={handleLogout} className="flex items-center px-3 py-2 rounded-md text-lg font-medium text-gray-300 hover:text-black hover:bg-slate-300 transition-all duration-200">
               <ArrowLeftStartOnRectangleIcon className="size-6 mr-2" />
               Logout
             </button>
