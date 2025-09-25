@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 import prisma from "../config/dbconfig.js";
 import { hashToken } from "../utils/hash.js";
 
-
 const refreshKey = process.env.REFRESH_TOKEN_SECRET_KEY;
 const accessKey = process.env.ACCESS_TOKEN_SECRET_KEY;
 
@@ -18,7 +17,18 @@ function generateRefreshToken(user) {
   });
 }
 
-export async function generateTokenandCookieService( res,user) {
+function generateUrlToken(movieId, userId) {
+  return (
+    jwt.
+    sign(
+      { movieId: movieId, userId: userId, type: "video_stream" },
+      accessKey,
+      { expiresIn: "4h" }
+    )
+  );
+}
+
+export async function generateTokenandCookieService(res, user) {
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
   const refreshTokenHash = hashToken(refreshToken);
@@ -44,12 +54,10 @@ export async function generateTokenandCookieService( res,user) {
 }
 
 export async function refreshTokenService(refreshToken) {
-
   let payload;
-  try{
-    payload = jwt.verify(refreshToken,refreshKey)
-  }
-  catch(error){
+  try {
+    payload = jwt.verify(refreshToken, refreshKey);
+  } catch (error) {
     return { success: false, status: 401, message: "Invalid refresh token" };
   }
 
@@ -83,4 +91,15 @@ export async function logoutServie(res, refreshToken) {
 
   res.clearCookie("refreshToken");
   return { status: 204, message: "Logout Success" };
+}
+
+export async function getSignedUrlService(movieId, userId) {
+
+  const urlToken = generateUrlToken(movieId,userId);
+
+  if(!urlToken){
+    return {success:false,status:500,message:"Error while creating urlToken"};
+  }
+
+  return {success:true,status:200,token:urlToken,message:"Successfully created urlToken"};
 }

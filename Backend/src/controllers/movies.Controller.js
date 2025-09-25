@@ -10,6 +10,7 @@ import {
   getMovieCastCrewService,
   getMovieTmdbService,
 } from "../services/tmdb.service.js";
+import { getSignedUrlService } from "../services/auth.service.js";
 
 export const createMovies = async (req, res, next) => {
   try {
@@ -85,3 +86,26 @@ export const getMovie = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const getSignedUrl = async (req,res,next)=>{
+  try{
+    const movieId = req.params.id;
+    const userId = req.userId;
+
+    const response = await getSignedUrlService(movieId,userId);
+
+    if(!response.success){
+      return res.status(400).json({message:response.message})
+    }
+    const urlToken = response.token;
+
+    const signedUrl = `http://localhost:3000/api/movies/getMovie/${movieId}?token=${urlToken}`
+
+    res.status(200).json({signedUrl:signedUrl});
+  }
+  catch(error){
+    next(error)
+  }
+}
+

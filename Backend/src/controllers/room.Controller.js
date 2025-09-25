@@ -2,6 +2,7 @@ import {
   createRoomService,
   getRoomsService,
   joinRoomService,
+  getRoomByIdService
 } from "../services/room.service.js";
 
 export const createRoom = async (req, res, next) => {
@@ -53,6 +54,18 @@ export const joinRoom = async (req, res, next) => {
     }
 
     res.status(200).json({ message: "Succesfullt joined the room" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getRoomById = async (req, res, next) => {
+  try {
+    const roomId = req.params.id;
+
+    const room = await getRoomByIdService(roomId);
+
+    res.status(200).json({ room: room });
   } catch (error) {
     next(error);
   }

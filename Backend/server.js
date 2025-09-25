@@ -11,6 +11,7 @@ import movieRoutes from './src/routes/movies.routes.js';
 import tmdbRoutes from './src/routes/tmdb.routes.js';
 import authRoutes from './src/routes/auth.routes.js'
 import cookieParser from 'cookie-parser';
+import { socketAuthHandler } from './src/middleware/socketAuthHandler.js';
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -33,7 +34,7 @@ const io = new Server(server, {
   },
 });
 
-
+io.use(socketAuthHandler);
 
 app.use(express.json());
 app.use(cookieParser());

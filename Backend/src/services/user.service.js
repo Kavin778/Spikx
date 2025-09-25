@@ -36,3 +36,15 @@ export async function getUserService(email){
 
   return user;
 }
+
+export async function getUserByIdService(userId) {
+  const user = await prisma.user.findUnique({
+    where:{
+      id:userId
+    }
+  })
+
+  delete user.password;
+
+  return user;
+}

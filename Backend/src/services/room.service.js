@@ -72,3 +72,21 @@ export async function joinRoomService(roomData) {
 
   return {success:true,room};
 }
+
+export async function getRoomByIdService(roomId) {
+  const room = await prisma.room.findUnique({
+    where:{
+      id:roomId,
+    },
+    include:{
+      creator:{
+        select:{
+          id:true,
+          username:true
+        }
+      },
+    }
+  })
+
+  return room;
+}
