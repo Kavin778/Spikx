@@ -1,5 +1,6 @@
 import prisma from "../config/dbconfig.js";
 import bcrypt from "bcrypt";
+import { getMovieImagesService } from "./tmdb.service.js";
 
 export async function createRoomService(roomData) {
   const { name, creatorId, isPublic, password, currentMovieId,description } = roomData;

@@ -42,6 +42,9 @@ model Movies{
   title           String
   type            String
   tmdbId          String    @unique
+  poster          String[]
+  backdrops       String[]
+  logos           String[]
   jellyfinItemId  String    @unique
   createdAt       DateTime  @default(now())
   rooms           Room[]
