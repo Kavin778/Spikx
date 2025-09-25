@@ -1,11 +1,13 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { clearAccessToken, getAccessToken, logoutService, refreshToken } from '../api/AuthService';
+import { getUserDetails } from '../api/UserService';
 
 export const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [user,setUser] =useState(null);
 
 
   useEffect(() => {
@@ -19,6 +21,7 @@ export const AuthProvider = ({ children }) => {
       try {
           await refreshToken();
           setIsAuthenticated(true);
+          setUser(await getUserDetails());
       } catch (error) {
         setIsAuthenticated(false);
       } finally {
@@ -45,7 +48,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, loading }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout,user, loading }}>
       {children}
     </AuthContext.Provider>
   );

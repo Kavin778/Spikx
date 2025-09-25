@@ -17,7 +17,7 @@ const RoomCard = ({ onInfoClick }) => {
   };
 
   const handleJoinRoom=()=>{
-    navigate('/movie/157336?watchParty=true');
+    navigate(`/movie/157336/${roomData.id}?watchParty=true`);
   }
   return (
     <div className="relative w-64 h-96 bg-red-100 rounded-lg group z-20 overflow-hidden">

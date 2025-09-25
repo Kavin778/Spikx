@@ -3,21 +3,49 @@ import MovieInfo from '../components/MovieInfo';
 import VideoPlayer from '../components/VideoPlayer';
 import { getMovieDetails } from '../api/MoviesService';
 import { useParams, useSearchParams } from 'react-router-dom';
+import Chat from '../components/Chat';
+import socketService from '../api/SocketService';
+import {useAuth} from "../hooks/useAuth"
+import { getRoomDetails } from '../api/RoomService';
 
 const MoviePage = () => {
   const [isChatEnabled, setIsChatEnabled] = useState(false);
-
-  const {tmdbId} = useParams();
+  const { tmdbId } = useParams();
   const [searchParams] = useSearchParams();
-  const watchParty = searchParams.get("watchParty") === "true";
+  const watchParty = searchParams.get('watchParty') === 'true';
+  const {roomId} = useParams()
+  const {user} = useAuth();
+  const {username} = user || "Anonymous";
+  const [creatorId,setCreatorId] = useState(null);
+  const [isHost,setIsHost] = useState(false);
 
+   async()=>{
+    const response = await getRoomDetails(roomId);
+    const userId = response.creator.id;
+    setCreatorId(userId);
+
+    if(creatorId === user.id){
+      setIsHost(true);
+    }
+   } 
 
   const handleChatEnable = enabled => {
     setIsChatEnabled(enabled);
   };
 
-
   const [movieDetails, setMovieDetails] = useState(null);
+
+  if(watchParty && roomId){
+    useEffect(() => {
+      const sockerurl = import.meta.env.VITE_SOCKET_BASE_URL;
+      socketService.connect(sockerurl);
+      socketService.joinRoom(roomId, username);
+
+      return () => {
+        socketService.disconnect();
+      };
+    }, [watchParty, roomId, username]);
+  }
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -58,8 +86,17 @@ const MoviePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black space-y-2">
-      <VideoPlayer isChatVisible={isChatEnabled} movieData={videoDetails} />
+    <div className="min-h-screen bg-black ">
+      <div className="flex h-[86vh]">
+        <div className={`transition-all duration-300 ${isChatEnabled ? 'w-[70%]' : 'w-full'}`}>
+          <VideoPlayer isChatVisible={isChatEnabled && watchParty} movieData={videoDetails} roomId={roomId} isHost={isHost}/>
+        </div>
+        {isChatEnabled && watchParty(
+          <div className="w-[30%] px-6 py-1 transition-all duration-300">
+            <Chat/>
+          </div>
+        )}
+      </div>
       <div>
         <MovieInfo
           movieData={movieInfos}

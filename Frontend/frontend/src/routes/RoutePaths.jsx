@@ -22,13 +22,14 @@ const RoutePaths = () => {
         }
       />
       <Route
-        path="/movie/:tmdbId"
+        path="/movie/:tmdbId" 
         element={
           <ProtectedRoute>
             <MoviePage />
           </ProtectedRoute>
         }
       />
+      <Route path="/movie/:tmdbId/:roomId"element={<ProtectedRoute><MoviePage/></ProtectedRoute>}/>
       <Route path="*" element={<ErrorPage />} />
       <Route path='/watchparty' element={<WatchPartyPage/>}/>
       <Route path='/card' element={<RoomCard/>}/>

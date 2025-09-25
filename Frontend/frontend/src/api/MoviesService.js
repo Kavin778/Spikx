@@ -45,11 +45,21 @@ export const getMovieGenres = async movieType => {
 
 export const getMovieDetails = async movieId => {
   try {
-    const response = await apiClient.get(`${BASE_URL}/movies/getMovieByTmdb/${movieId}`);
-    console.log(response.data);
+    const response = await apiClient.get(`/movies/getMovieByTmdb/${movieId}`);
     return response.data.movie;
   } catch (error) {
     console.error('Error fetching movie details:', error);
     return null;
   }
 };
+
+export const getSignedUrl = async (movieId) =>{
+  try{
+    const response = await apiClient.get(`/movies/getSignedUrl/${movieId}`);
+    return response.data.signedUrl;
+  }
+  catch(error){
+    console.error("Error getting the Url");
+    throw error;
+  }
+}

@@ -10,6 +10,10 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
     (config)=>{
+
+        if(config.url?.includes('/movies/getMovies/')){
+            return config;
+        }
         const token = getAccessToken();
 
         if(token){
