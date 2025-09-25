@@ -1,13 +1,16 @@
 import prisma from "../config/dbconfig.js";
 
 export async function createMoviesService(movieData) {
-  const { title, type, tmdbId, jellyfinItemId } = movieData;
+  const { title, type, tmdbId, jellyfinItemId,poster,backdrops,logos } = movieData;
   const newMovie = await prisma.movies.create({
     data: {
       title,
       type,
       tmdbId,
       jellyfinItemId,
+      poster,
+      logos,
+      backdrops,
     },
   });
 
@@ -23,12 +26,12 @@ export async function getMovieByIdService(movieId) {
   return movie;
 }
 
-export async function getMovieByTmdbIdService(Id){
-    const movie = await prisma.movies.findUnique({
-        where:{
-            tmdbId:Id
-        }
-    });
+export async function getMovieByTmdbIdService(Id) {
+  const movie = await prisma.movies.findUnique({
+    where: {
+      tmdbId: Id,
+    },
+  });
 
-    return movie;
+  return movie;
 }
