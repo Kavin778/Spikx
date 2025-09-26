@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { PaperAirplaneIcon } from '@heroicons/react/24/outline';
 import socketService from '../api/SocketService';
 
@@ -7,10 +7,19 @@ const Chat = ({ username }) => {
   const [newMessage, setNewMessage] = useState('');
   const messagesendRef = useRef(null);
   const chatContainerRef = useRef(null);
+  const isReceivingMessage = useRef(false);
 
-  const addMessage = msg => {
+  const addMessage =useCallback( msg => {
+
+    if(isReceivingMessage.current) return;
+    isReceivingMessage.current = true;
+
     setMessages(prev => [...prev, msg]);
-  };
+
+    setTimeout(()=>{
+      isReceivingMessage.current=false;
+    },100)
+  },[]);
 
   useEffect(() => {
     socketService.onReceiveMessage(addMessage);
@@ -32,8 +41,7 @@ const Chat = ({ username }) => {
     e.preventDefault();
     e.stopPropagation();
     if (newMessage.trim() === '') return;
-
-    socketService.sendMessage(newMessage, user.username);
+    socketService.sendMessage(newMessage, username);
     setNewMessage('');
   };
 
@@ -50,7 +58,7 @@ const Chat = ({ username }) => {
           {messages.map(message => (
             <li
               key={message.id}
-              className={`flex text-white ${messages.username === username ? 'justify-end' : 'justify-start'}`}
+              className={`flex text-white ${message.username === username ? 'justify-end' : 'justify-start'}`}
             >
               <p
                 className={`text-md font-semibold ${message.username === username ? 'ml-12' : ''}`}
@@ -58,9 +66,9 @@ const Chat = ({ username }) => {
                 {message.username === username ? 'You' : message.username}:
               </p>
               <div
-                className={`ml-2 px-2 py-0.5 rounded-md group text-md font-semibold break-words ${message.sender === 'me' ? 'bg-white text-black' : 'bg-slate-400 text-white'}`}
+                className={`ml-2 px-2 py-0.5 rounded-md group text-md font-semibold break-words ${message.username === 'me' ? 'bg-white text-black' : 'bg-slate-400 text-white'}`}
               >
-                <p className="line">{message.text}</p>
+                <p className="line">{message.message}</p>
               </div>
             </li>
           ))}

@@ -20,7 +20,7 @@ const RoomInfo = ({roomData,onClose}) => {
           </div>
           <div className="flex-1 w-full h-full ml-2">
             <div className="flex flex-col w-full h-auto space-y-3 p-4">
-              <h1 className="text-4xl font-bold text-white">{roomData.title}</h1>
+              <h1 className="text-4xl font-bold text-white">{roomData.name}</h1>
               <span
                 className={`text-lg font-semibold w-fit py-0.5 px-1 rounded-md ${isPublic ? 'bg-blue-500' : 'bg-red-600'} text-white`}
               >

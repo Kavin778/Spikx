@@ -16,12 +16,13 @@ export const AuthProvider = ({ children }) => {
       if (token) {
         setIsAuthenticated(true);
         setLoading(false)
+        const response = await getUserDetails();
+        setUser(response);
         return;
       }
       try {
           await refreshToken();
           setIsAuthenticated(true);
-          setUser(await getUserDetails());
       } catch (error) {
         setIsAuthenticated(false);
       } finally {

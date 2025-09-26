@@ -1,12 +1,14 @@
 import { PlusIcon } from '@heroicons/react/24/outline';
 import RoomCard from '../components/RoomCard';
 import RoomInfo from '../components/RoomInfo';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getRooms } from '../api/RoomService';
 
 const WatchPartyPage = () => {
   const [isRoomInfo, setIsRoomInfo] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
-
+  const [rooms,setRooms] = useState([]);
+ 
   const handleRoomInfoOpen = roomData => {
     setSelectedRoom(roomData);
     setIsRoomInfo(true);
@@ -16,6 +18,15 @@ const WatchPartyPage = () => {
     setIsRoomInfo(false);
     setSelectedRoom(null);
   };
+
+  useEffect(()=>{
+    const fetchRooms = async()=>{
+      const response = await getRooms();
+      setRooms(response.rooms);
+    }
+    fetchRooms();
+  },[rooms]);
+
   return (
     <div className="bg-black  min-h-screen w-full pt-20">
       <div className={`${isRoomInfo ? `blur-sm` : ''} transition-all duration-300`}>
@@ -40,18 +51,20 @@ const WatchPartyPage = () => {
         <div className="w-full px-12 ">
           <h1 className="text-4xl text-slate-200 font-extrabold mb-1">Available Rooms</h1>
           <div className="grid grid-cols-6 gap-y-8 mt-4">
-            <RoomCard onInfoClick={handleRoomInfoOpen} />
-            <RoomCard onInfoClick={handleRoomInfoOpen} />
-            <RoomCard onInfoClick={handleRoomInfoOpen} />
-            <RoomCard onInfoClick={handleRoomInfoOpen} />
+            {rooms.map(room => (
+              <RoomCard key={room.id} roomData={room} onInfoClick={handleRoomInfoOpen} />
+            ))}
           </div>
         </div>
       </div>
 
       {isRoomInfo && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div onClick={handleRoomInfoClose} className='absolute inset-0 bg-black/50 backdrop-blur-sm'></div>
-            <RoomInfo roomData={selectedRoom} onClose={handleRoomInfoClose}/>
+          <div
+            onClick={handleRoomInfoClose}
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+          ></div>
+          <RoomInfo roomData={selectedRoom} onClose={handleRoomInfoClose} />
         </div>
       )}
     </div>

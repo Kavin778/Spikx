@@ -37,7 +37,8 @@ class SocketService {
   }
 
   sendMessage(message, username) {
-    this.socket?.emit('send_message', { message, username });
+    console.log(username)
+    this.socket?.emit('send_message', { message,username });
   }
 
   hostPlay(roomId, currentTime) {
@@ -74,6 +75,7 @@ class SocketService {
   }
 
   onReceiveMessage(callback) {
+    console.log(callback)
     if (this.socket) {
       this.socket.on('receive_message', callback);
     }

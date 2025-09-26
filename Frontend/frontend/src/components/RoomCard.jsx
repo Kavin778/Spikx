@@ -3,14 +3,9 @@ import HollowKnight from '../assets/HollowKnight.png';
 import {EyeIcon,EyeSlashIcon,InformationCircleIcon,UserGroupIcon,} from '@heroicons/react/16/solid';
 
 
-const RoomCard = ({ onInfoClick }) => {
+const RoomCard = ({ roomData,onInfoClick }) => {
   const isPublic = true;
-  const roomData = {
-    title: 'SUPERMAN',
-    type: 'Movie',
-    description: 'fafadknvavkvn  hauvdhnvfajn  ajnvdd dvnkjdnvKJ DIN NVINA V IDVB IVI J ISDV',
-    creator: 'KAVIN',
-  };
+
   const navigate = useNavigate()
   const handleInfoClick = () => {
     onInfoClick(roomData);

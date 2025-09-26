@@ -11,4 +11,12 @@ export const getRoomDetails = async (roomId)=>{
     }
 }
 
-export const getRooms
+export const getRooms = async()=>{
+    try{
+        const response = await apiClient.get("/rooms/getRooms");
+        return response.data.rooms;
+    }
+    catch(error){
+        console.error("Error while fetching movies");
+    }
+}

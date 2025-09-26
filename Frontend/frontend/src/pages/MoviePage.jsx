@@ -16,6 +16,7 @@ const MoviePage = () => {
   const {roomId} = useParams()
   const {user} = useAuth();
   const {username} = user || "Anonymous";
+
   const [creatorId,setCreatorId] = useState(null);
   const [isHost,setIsHost] = useState(false);
 
@@ -91,9 +92,9 @@ const MoviePage = () => {
         <div className={`transition-all duration-300 ${isChatEnabled ? 'w-[70%]' : 'w-full'}`}>
           <VideoPlayer isChatVisible={isChatEnabled && watchParty} movieData={videoDetails} roomId={roomId} isHost={isHost}/>
         </div>
-        {isChatEnabled && watchParty(
+        {isChatEnabled &&(
           <div className="w-[30%] px-6 py-1 transition-all duration-300">
-            <Chat/>
+            <Chat username={username}/>
           </div>
         )}
       </div>
