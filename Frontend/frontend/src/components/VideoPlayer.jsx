@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState,useCallback } from 'react';
 import { PlayIcon } from '@heroicons/react/24/outline';
 import { getSignedUrl } from '../api/MoviesService';
 import socketService from '../api/SocketService';
 
 const VideoPlayer = ({ isChatVisible, movieData, roomId, isHost }) => {
   const [canPlay, setCanPlay] = useState(false);
-  const [movieUrl, setMovieUrl] = useState(null);
+  const [movieUrl, setMovieUrl] = useState('');
   const logoBaseUrl = import.meta.env.VITE_TMDB_ORIGINAL_IMAGE_BASE_URL;
   const logoPath = `${logoBaseUrl}${movieData.logos[0].file_path}`;
   const backdropUrl = `${logoBaseUrl}${movieData.backdrops[0].file_path}`;
@@ -23,10 +23,14 @@ const VideoPlayer = ({ isChatVisible, movieData, roomId, isHost }) => {
   const videoRef = useRef(null);
   const isReceivingSync = useRef(false);
 
-  const syncVideoPlayer = syncData => {
+  const syncVideoPlayer = useCallback((syncData) => {
     const videoElement = videoRef.current;
+    console.log(syncData)
+    if(isReceivingSync.current) return;
+    isReceivingSync.current=true;
 
     if (!videoElement || !syncData) {
+      isReceivingSync.current = false;
       return;
     }
 
@@ -42,23 +46,23 @@ const VideoPlayer = ({ isChatVisible, movieData, roomId, isHost }) => {
 
     setTimeout(() => {
       isReceivingSync.current = false;
-    });
-  };
+    },100);
+  },[])
 
-  const handlePlay = () => {
-    if (isReceivingSync.current) return;
+  const handlePlay = useCallback(() => {
+    if (isReceivingSync.current || !isHost) return;
     socketService.hostPlay(roomId, videoRef.current.currentTime);
-  };
+  },[roomId,isHost])
 
-  const handlePause = () => {
-    if (isReceivingSync.current) return;
+  const handlePause =useCallback(() => {
+    if (isReceivingSync.current || !isHost) return;
     socketService.hostPause(roomId, videoRef.current.currentTime);
-  };
+  },[roomId,isHost])
 
-  const handleSeek = () => {
-    if (isReceivingSync.current) return;
-    socketService.handleSeek(roomId.videoRef.current.currentTime);
-  };
+  const handleSeek = useCallback(() => {
+    if (isReceivingSync.current || !isHost) return;
+    socketService.hostSeek(roomId,videoRef.current.currentTime);
+  },[roomId,isHost])
 
   useEffect(() => {
     socketService.onSyncPlayback(syncVideoPlayer);
@@ -68,22 +72,22 @@ const VideoPlayer = ({ isChatVisible, movieData, roomId, isHost }) => {
     if (videoElement && canPlay && isHost) {
       videoElement.addEventListener('play', handlePlay);
       videoElement.addEventListener('pause', handlePause);
-      videoElement.addEventListener('seeking', handleSeek);
+      videoElement.addEventListener('seeked', handleSeek);
 
       return () => {
         videoElement.removeEventListener('play', handlePlay);
         videoElement.removeEventListener('pause', handlePause);
-        videoElement.removeEventListener('seeking', handleSeek);
+        videoElement.removeEventListener('seeked', handleSeek);
       };
     }
-  }, [roomId, isHost, canPlay]);
+  }, [roomId, isHost, canPlay,handlePause,handlePause,handleSeek,syncVideoPlayer]);
 
   return (
     <div className="relative bg-black rounded-xl w-full h-full mx-4 p-1  overflow-hidden">
       {canPlay ? (
         <video
           ref={videoRef}
-          className="w-full h-full object-cover rounded-xl brightness-100"
+          className="w-full h-full object-cover rounded-xl brightness-100" 
           controls={isHost}
           autoPlay={false}
           muted

@@ -17,18 +17,23 @@ const MoviePage = () => {
   const {user} = useAuth();
   const {username} = user || "Anonymous";
 
-  const [creatorId,setCreatorId] = useState(null);
   const [isHost,setIsHost] = useState(false);
 
-   async()=>{
-    const response = await getRoomDetails(roomId);
-    const userId = response.creator.id;
-    setCreatorId(userId);
-
-    if(creatorId === user.id){
-      setIsHost(true);
+  useEffect(() => {
+    if (watchParty && roomId && user?.id) {
+      const checkHostStatus = async () => {
+        try {
+          const roomDetails = await getRoomDetails(roomId);
+          if (roomDetails && roomDetails.creator.id === user.id) {
+            setIsHost(true);
+          }
+        } catch (error) {
+          console.error('Failed to fetch room details or user is not the host', error);
+        }
+      };
+      checkHostStatus();
     }
-   } 
+  }, [roomId, user, watchParty]);
 
   const handleChatEnable = enabled => {
     setIsChatEnabled(enabled);

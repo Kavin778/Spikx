@@ -37,11 +37,11 @@ class SocketService {
   }
 
   sendMessage(message, username) {
-    console.log(username)
     this.socket?.emit('send_message', { message,username });
   }
 
   hostPlay(roomId, currentTime) {
+    console.log(roomId)
     if (this.socket) {
       this.socket.emit('host_play', {
         roomId,
