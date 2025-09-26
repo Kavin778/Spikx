@@ -4,7 +4,7 @@ import { getMovieImagesService } from "./tmdb.service.js";
 
 export async function createRoomService(roomData) {
   const { name, creatorId, isPublic, password, currentMovieId,description } = roomData;
-  console.log(roomData)
+  console.log(roomData);
   let hashedPassword = null;
   if (!isPublic) {
     if (!password) {

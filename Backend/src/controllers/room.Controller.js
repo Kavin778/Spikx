@@ -8,18 +8,18 @@ import {
 export const createRoom = async (req, res, next) => {
   try {
     const data = req.body;
-    const userId = req.userId;
+    const userId = req.userId; 
 
     const roomData = {
       creatorId: userId,
       name:data.name,
       isPublic:data.isPublic,
       password:data.password,
-      currentMovieId:data.currentMovieId
+      currentMovieId:data.currentMovieId,
+      description:data.description
     }
     const newRoom = await createRoomService(roomData);
 
-    console.log(newRoom);
     if (!newRoom.success) {
       return res.status(newRoom.status).json({ message: newRoom.message });
     }
@@ -38,7 +38,7 @@ export const getRooms = async (req, res, next) => {
       return res.status(rooms.status).json({ message: rooms.message });
     }
 
-    res.status(200).json({ message: "Rooms Fetched Successfully" }, rooms);
+    res.status(200).json({ message: "Rooms Fetched Successfully" ,rooms:rooms});
   } catch (error) {
     next(error);
   }
