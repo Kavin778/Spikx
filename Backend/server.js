@@ -12,23 +12,27 @@ import tmdbRoutes from "./src/routes/tmdb.routes.js";
 import authRoutes from "./src/routes/auth.routes.js";
 import cookieParser from "cookie-parser";
 import { socketAuthHandler } from "./src/middleware/socketAuthHandler.js";
+import { LocalIpAddress } from "./src/config/ipconfig.js";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
 
 const app = express();
 const server = http.createServer(app);
+const ip = LocalIpAddress();
+
+console.log(ip)
 
 app.use(
   cors({
-    origin: "http://10.40.40.176:5173/",
+    origin: `http://${ip}:5173`,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
 const io = new Server(server, {
   cors: {
-    origin: "http://10.40.40.176:5173/",
+    origin: `http://${ip}:5173`,
     methods: ["GET", "POST"],
     credentials: true,
   },
@@ -49,6 +53,6 @@ app.use(errorHandler);
 
 socketHandler(io);
 
-server.listen(PORT, () => {
+server.listen(PORT,"0.0.0.0", () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });

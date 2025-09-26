@@ -52,7 +52,7 @@ export default function socketHandler(io) {
           `Permission denied ${socket.username}, you are not roomOwner bro, only he can control`
         );
       }
-      const newState = { state: "playing", time: data.currenttime };
+      const newState = { state: "playing", time: data.currentTime };
       roomStates[data.roomId] = newState;
       socket.to(data.roomId).emit("sync_playback", newState);
     });
@@ -63,7 +63,7 @@ export default function socketHandler(io) {
           `Permission denied ${socket.username}, you are not roomOwner bro, only he can control`
         );
       }
-      const newState = { state: "paused", time: data.currenttime };
+      const newState = { state: "paused", time: data.currentTime };
       roomStates[data.roomId] = newState;
       socket.to(data.roomId).emit("sync_playback", newState);
     });
@@ -75,12 +75,12 @@ export default function socketHandler(io) {
         );
       }
       if (roomStates[data.roomId]) {
-        roomStates[data.roomId].time = data.currenttime;
+        roomStates[data.roomId].time = data.currentTime;
       }
 
       const currentState = roomStates[data.roomId] || {
-        state: "paused",
-        time: data.currenttime,
+        state: "seeked",
+        time: data.currentTime,
       };
 
       socket.to(data.roomId).emit("sync_playback", currentState);
