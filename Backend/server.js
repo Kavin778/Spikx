@@ -21,23 +21,21 @@ const app = express();
 const server = http.createServer(app);
 const ip = LocalIpAddress();
 
-console.log(ip)
-
 app.use(
   cors({
-    origin: `http://${ip}:5173`,
+    origin: [`http://localhost:5173`],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
 const io = new Server(server, {
   cors: {
-    origin: `http://${ip}:5173`,
+    origin: [`http://localhost:5173`],
     methods: ["GET", "POST"],
     credentials: true,
   },
 });
-
+ 
 io.use(socketAuthHandler);
 
 app.use(express.json());

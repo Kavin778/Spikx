@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   createMoviesService,
+  getAllMoviesService,
   getMovieByIdService,
   getMovieByTmdbIdService,
 } from "../services/movies.service.js";
@@ -108,6 +109,16 @@ export const getSignedUrl = async (req,res,next)=>{
   }
   catch(error){
     next(error)
+  }
+}
+
+export const getAllMovies = async (req,res,next)=>{
+  try{
+    const movies = await getAllMoviesService();
+    res.status(200).json({message:"Movies fetched successfully",movies:movies});
+  }
+  catch(error){
+    next();
   }
 }
 

@@ -35,3 +35,9 @@ export async function getMovieByTmdbIdService(Id) {
 
   return movie;
 }
+
+export async function getAllMoviesService() {
+  const movies = await prisma.movies.findMany();
+
+  return movies;
+}

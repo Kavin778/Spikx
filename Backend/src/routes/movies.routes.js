@@ -1,5 +1,5 @@
 import Router from "express";
-import {createMovies,getMovie,getMovieByTmdb, getSignedUrl} from "../controllers/movies.Controller.js";
+import {createMovies,getAllMovies,getMovie,getMovieByTmdb, getSignedUrl} from "../controllers/movies.Controller.js";
 import { authHandler } from "../middleware/authHandler.js";
 import { signedUrlHandler } from "../middleware/signedUrlHandler.js";
 
@@ -12,5 +12,6 @@ router.use(authHandler);
 router.get('/getSignedUrl/:id',getSignedUrl)
 router.post('/createMovie',createMovies);
 router.get('/getMovieByTmdb/:id',getMovieByTmdb);
+router.get('/getAllMovies',getAllMovies)
 
 export default router;

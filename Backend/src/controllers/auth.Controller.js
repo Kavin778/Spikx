@@ -23,7 +23,7 @@ export const login = async (req, res, next) => {
 
 export const refresh = async (req, res, next) => {
   try {
-    const {refreshToken} = req.cookies;
+    const {refreshToken} = req.cookies; 
     if (!refreshToken)
       return res.status(401).json({ message: "Invalid Credentials" });
     
