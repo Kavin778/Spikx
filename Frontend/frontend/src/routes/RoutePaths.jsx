@@ -7,6 +7,7 @@ import ErrorPage from '../pages/ErrorPage';
 import WatchPartyPage from '../pages/WatchPartyPage';
 import RoomCard from '../components/RoomCard';
 import RoomInfo from '../components/RoomInfo';
+import CreateRoom from '../components/CreateRoom';
 
 const RoutePaths = () => {
   return (
@@ -34,6 +35,7 @@ const RoutePaths = () => {
       <Route path='/watchparty' element={<WatchPartyPage/>}/>
       <Route path='/card' element={<RoomCard/>}/>
       <Route path='/roomInfo' element={<RoomInfo/>}/>
+      <Route path='createRoom' element={<CreateRoom/>}/>
     </Routes>
   );
 };

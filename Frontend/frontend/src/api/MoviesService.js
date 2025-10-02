@@ -63,3 +63,16 @@ export const getSignedUrl = async (movieId) =>{
     throw error;
   }
 }
+
+export const getAllMovies =async ()=>{
+  try{
+    const response = await apiClient.get('/movies/getAllMovies');
+    console.log(response)
+    return response.data.movies;
+  }
+  catch(error){
+    console.error("Failed to fetch movies")
+    return null;
+  }
+}
+

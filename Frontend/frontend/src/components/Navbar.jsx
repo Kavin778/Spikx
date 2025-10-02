@@ -10,10 +10,10 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
 const Navbar = () => {
   const navItems = [
-    { name: 'Home', icon: HomeIcon, href: '#' },
+    { name: 'Home', icon: HomeIcon, href: '/home' },
     { name: 'Movies', icon: FilmIcon, href: '#' },
     { name: 'TV Shows', icon: TvIcon, href: '#' },
-    { name: 'Watch Party', icon: UserGroupIcon, href: '#' },
+    { name: 'Watch Party', icon: UserGroupIcon, href: '/watchParty' },
   ];
 
   const [isScrolled, setIsScrolled] = useState(false);
@@ -64,7 +64,7 @@ const Navbar = () => {
           </div>
 
           <div className="flex items-center">
-            <button onClick={handleLogout} className="flex items-center px-3 py-2 rounded-md text-lg font-medium text-gray-300 hover:text-black hover:bg-slate-300 transition-all duration-200">
+            <button onClick={handleLogout} className="flex cursor-pointer items-center px-3 py-2 rounded-md text-lg font-medium text-gray-300 hover:text-black hover:bg-slate-300 transition-all duration-200">
               <ArrowLeftStartOnRectangleIcon className="size-6 mr-2" />
               Logout
             </button>

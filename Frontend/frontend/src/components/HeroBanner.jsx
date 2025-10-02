@@ -71,8 +71,8 @@ const HeroBanner = ({ movieData }) => {
         </div>
         <p className="text-base leading-relaxed line-clamp-3 max-w-lg">{movieData.overview}</p>
         <span className="text-md mt-2 text-star">{movieGenres}</span>
-        <button onClick={handlePlayClick} className="bg-slate-400 hover:bg-slate-200 w-58  justify-center hover:text-black group text-white font-bold py-3 px-8 rounded-xl flex items-center gap-2 transition-all duration-300 mt-4">
-          <PlayIcon className="size-6 text-white group-hover:text-black inline-block transition-all duration-300" />
+        <button onClick={handlePlayClick} className="bg-slate-400 cursor-pointer hover:bg-slate-200 w-58  justify-center hover:text-black group text-white font-bold py-3 px-8 rounded-xl flex items-center gap-2 transition-all duration-300 mt-4">
+          <PlayIcon className="size-6  text-white group-hover:text-black inline-block transition-all duration-300" />
           Watch Now
         </button>
       </div>

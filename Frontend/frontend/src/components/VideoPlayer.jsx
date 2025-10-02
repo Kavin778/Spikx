@@ -88,9 +88,10 @@ const VideoPlayer = ({ isChatVisible, movieData, roomId, isHost }) => {
         <video
           ref={videoRef}
           className="w-full h-full object-cover rounded-xl brightness-100" 
-          controls={isHost}
+          controls
           autoPlay={false}
           muted
+          disablePictureInPicture
         >
           <source src={movieUrl} type="video/mp4" />
           Your browser does not support the video tag.

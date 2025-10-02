@@ -3,12 +3,14 @@ import RoomCard from '../components/RoomCard';
 import RoomInfo from '../components/RoomInfo';
 import { useEffect, useState } from 'react';
 import { getRooms } from '../api/RoomService';
+import CreateRoom from '../components/CreateRoom';
 
 const WatchPartyPage = () => {
   const [isRoomInfo, setIsRoomInfo] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
-  const [rooms,setRooms] = useState([]);
- 
+  const [rooms, setRooms] = useState([]);
+  const [isCreateRoomOpen, setIsCreateRoomOpen] = useState(false);
+
   const handleRoomInfoOpen = roomData => {
     setSelectedRoom(roomData);
     setIsRoomInfo(true);
@@ -19,19 +21,22 @@ const WatchPartyPage = () => {
     setSelectedRoom(null);
   };
 
-  useEffect(()=>{
-    const fetchRooms = async()=>{
+  useEffect(() => {
+    const fetchRooms = async () => {
       const response = await getRooms();
       setRooms(response.rooms);
-    }
+    };
     fetchRooms();
-  },[rooms]);
+  }, [rooms]);
 
   return (
     <div className="bg-black  min-h-screen w-full pt-20">
       <div className={`${isRoomInfo ? `blur-sm` : ''} transition-all duration-300`}>
         <div className="h-auto w-full flex flex-row justify-start items-center px-12 py-8">
-          <div className="w-32 h-32 rounded-xl flex justify-center items-center group border-2 bg-slate-400 hover:bg-slate-200 transition-all duration-300 cursor-pointer flex-shrink-0">
+          <div
+            onClick={() => setIsCreateRoomOpen(true)}
+            className="w-32 h-32 rounded-xl flex justify-center items-center group border-2 bg-slate-400 hover:bg-slate-200 transition-all duration-300 cursor-pointer flex-shrink-0"
+          >
             <PlusIcon className="size-16 text-slate-200 group-hover:text-black transition-all duration-300" />
           </div>
           <div className="flex-1 ml-8 flex flex-col justify-start space-y-4">
@@ -59,12 +64,22 @@ const WatchPartyPage = () => {
       </div>
 
       {isRoomInfo && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center transition-all duration-300">
           <div
             onClick={handleRoomInfoClose}
-            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-all duration-300"
           ></div>
           <RoomInfo roomData={selectedRoom} onClose={handleRoomInfoClose} />
+        </div>
+      )}
+
+      {isCreateRoomOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center transition-all duration-300">
+          <div
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm transiton-all duration-300"
+            onClick={() => setIsCreateRoomOpen(false)}
+          ></div>
+          <CreateRoom />
         </div>
       )}
     </div>

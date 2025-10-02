@@ -1,26 +1,28 @@
 import { XMarkIcon, ArrowLeftStartOnRectangleIcon,UserGroupIcon } from '@heroicons/react/16/solid';
-import HollowKnight from '../assets/HollowKnight.png';
+
 
 const RoomInfo = ({roomData,onClose}) => {
-  const isPublic = false;
+  const isPublic = roomData.isPublic;
+  const posterUrl = import.meta.env.VITE_TMDB_IMAGE_BASE_URL + roomData.currentMovie.poster[0];
+
   return (
     <div className="w-full min-h-screen flex justify-center items-center">
       <div className="flex flex-col w-4xl z-10 h-[57vh] bg-gray-700 rounded-xl">
         <div className="flex w-full h-auto justify-between">
-          <h1 className="text-4xl p-4  font-bold text-white line-clamp-1">ROOM OWNER NAME</h1>
+          <h1 className="text-4xl p-4  font-bold text-white line-clamp-1">{roomData.creator.username}'s WatchParty</h1>
           <XMarkIcon onClick={onClose} className="size-10 m-3 text-white hover:text-red-600 hover:cursor-pointer" />
         </div>
         <div className="w-full h-full flex rounded-b-xl p-3 ">
           <div className="w-72 h-full rounded-lg">
             <img
-              src={HollowKnight}
+              src={posterUrl}
               alt="MovieTitle"
               className="w-full h-full object-cover rounded-lg"
             />
           </div>
           <div className="flex-1 w-full h-full ml-2">
             <div className="flex flex-col w-full h-auto space-y-3 p-4">
-              <h1 className="text-4xl font-bold text-white">{roomData.name}</h1>
+              <h1 className="text-4xl font-bold text-white">{roomData.currentMovie.title}</h1>
               <span
                 className={`text-lg font-semibold w-fit py-0.5 px-1 rounded-md ${isPublic ? 'bg-blue-500' : 'bg-red-600'} text-white`}
               >
@@ -41,7 +43,7 @@ const RoomInfo = ({roomData,onClose}) => {
                 Rules :{roomData.description}
               </p>
               <span className="text-lg font-semibold text-white">Members Online:</span>
-              <span className="text-lg font-semibold text-white">Created At:</span>
+              <span className="text-lg font-semibold text-white">Created at: {roomData.createdAt.slice(0,10)}</span>
             </div>
             <div className="flex flex-row justify-center items-center p-1 gap-6 mt-22 w-full h-auto">
               <button onClick={onClose} className="bg-slate-400 text-3xl flex justify-center items-center group hover:bg-red-600 hover:cursor-pointer text-white p-2 w-64 rounded-lg transition-all duration-300">
