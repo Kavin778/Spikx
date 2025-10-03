@@ -22,7 +22,7 @@ export const createRoom = async (req, res, next) => {
 
     if (!newRoom.success) {
       return res.status(newRoom.status).json({ message: newRoom.message });
-    }
+    } 
     res
       .status(201)
       .json({ message: "Room created successfully", room: newRoom });
@@ -39,7 +39,7 @@ export const getRooms = async (req, res, next) => {
     }
 
     res.status(200).json({ message: "Rooms Fetched Successfully" ,rooms:rooms});
-  } catch (error) {
+  } catch (error){
     next(error);
   }
 };
@@ -53,7 +53,7 @@ export const joinRoom = async (req, res, next) => {
       return res.status(room.status).json({success:room.success, message: room.message });
     }
 
-    res.status(200).json({ message: "Succesfullt joined the room" });
+    res.status(200).json({success:room.success, message: "Succesfullt joined the room" });
   } catch (error) {
     next(error);
   }

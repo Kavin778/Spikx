@@ -63,14 +63,19 @@ export async function joinRoomService(roomData) {
       id: roomData.id,
     },
   });
+
+  if(!room){
+    return{ success:false,status:404,message:"Room not found"}
+  }
   
-  if(roomData.password === null && room){
+  if(room.isPublic){
+    delete room.password
     return { success: true, room };
   }
 
   const isPassValid = bcrypt.compare(roomData.password,room.password)
 
-  if (!room || !isPassValid) {
+  if (!isPassValid) {
     return { success: false, status: 401, message: "Invalid room or Password" };
   }
 
