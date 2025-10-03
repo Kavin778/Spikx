@@ -50,7 +50,7 @@ export const joinRoom = async (req, res, next) => {
 
     const room = await joinRoomService(roomData);
     if (!room.success) {
-      return res.status(room.status).json({ message: room.message });
+      return res.status(room.status).json({success:room.success, message: room.message });
     }
 
     res.status(200).json({ message: "Succesfullt joined the room" });

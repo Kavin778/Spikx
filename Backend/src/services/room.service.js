@@ -63,6 +63,10 @@ export async function joinRoomService(roomData) {
       id: roomData.id,
     },
   });
+  
+  if(roomData.password === null && room){
+    return { success: true, room };
+  }
 
   const isPassValid = bcrypt.compare(roomData.password,room.password)
 
@@ -70,6 +74,7 @@ export async function joinRoomService(roomData) {
     return { success: false, status: 401, message: "Invalid room or Password" };
   }
 
+  delete room.password;
   return {success:true,room};
 }
 
