@@ -7,7 +7,7 @@ import {
 } from '@heroicons/react/16/solid';
 import { joinRoom } from '../api/RoomService';
 
-const RoomCard = ({ roomData, onInfoClick }) => {
+const RoomCard = ({ roomData, onInfoClick,onJoinPrvateRoom }) => {
   const isPublic = roomData.isPublic;
 
   const navigate = useNavigate();
@@ -17,18 +17,13 @@ const RoomCard = ({ roomData, onInfoClick }) => {
 
   const tmdbId = roomData.currentMovie.tmdbId;
 
-  const handleJoinRoom = async () => {
-    if(!isPublic){
-      const response = await joinRoom(roomData);
-      if(response.success){
-        navigate(`/movie/${tmdbId}/${roomData.id}?watchParty=true`);
-      }
-      else{
-        console.error("Failed to join room ")
-      }
+  const handleJoinRoom =() => {
+    if(isPublic){
+      navigate(`/movie/${tmdbId}/${roomData.id}?watchParty=true`);
+
     }
     else{
-      navigate(`/movie/${tmdbId}/${roomData.id}?watchParty=true`);
+      onJoinPrvateRoom(roomData);
     }
   };
 

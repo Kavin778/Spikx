@@ -2,14 +2,22 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 import RoomCard from '../components/RoomCard';
 import RoomInfo from '../components/RoomInfo';
 import { useEffect, useState } from 'react';
-import { getRooms } from '../api/RoomService';
+import { getRooms, joinRoom } from '../api/RoomService';
 import CreateRoom from '../components/CreateRoom';
+import { useNavigate } from 'react-router-dom';
+import PasswordPrompt from '../components/PasswordPrompt';
 
 const WatchPartyPage = () => {
   const [isRoomInfo, setIsRoomInfo] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [rooms, setRooms] = useState([]);
   const [isCreateRoomOpen, setIsCreateRoomOpen] = useState(false);
+  const [password, setPassword] = useState({
+    isOpen: false,
+    roomData: null,
+  });
+
+  const navigate = useNavigate();
 
   const handleRoomInfoOpen = roomData => {
     setSelectedRoom(roomData);
@@ -19,8 +27,28 @@ const WatchPartyPage = () => {
   const handleRoomInfoClose = () => {
     setIsRoomInfo(false);
     setSelectedRoom(null);
-  }; 
-  
+  };
+
+  const handlePasswordOpen = roomData => {
+    setPassword({ isOpen: true, roomData });
+  };
+
+  const handlePasswordSubmit = async curpassword => {
+    const { roomData } = password;
+    try {
+      const response = await joinRoom(roomData, curpassword);
+      console.log(response)
+      if (response.success) {
+        navigate(`/movie/${roomData.currentMovie.tmdbId}/${roomData.id}?watchParty=true`);
+      } else {
+        console.error('Failed to join rooom');
+      }
+    } catch (error) {
+      console.error('Failed to join Room', error);
+    } finally {
+      setPassword({ isOpen: false, roomData: null });
+    }
+  };
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -58,7 +86,12 @@ const WatchPartyPage = () => {
           <h1 className="text-4xl text-slate-200 font-extrabold mb-1">Available Rooms</h1>
           <div className="grid grid-cols-6 gap-y-8 mt-4">
             {rooms.map(room => (
-              <RoomCard key={room.id} roomData={room} onInfoClick={handleRoomInfoOpen} />
+              <RoomCard
+                key={room.id}
+                roomData={room}
+                onInfoClick={handleRoomInfoOpen}
+                onJoinPrvateRoom={handlePasswordOpen}
+              />
             ))}
           </div>
         </div>
@@ -70,7 +103,7 @@ const WatchPartyPage = () => {
             onClick={handleRoomInfoClose}
             className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-all duration-300"
           ></div>
-          <RoomInfo roomData={selectedRoom} onClose={handleRoomInfoClose} />
+          <RoomInfo roomData={selectedRoom} onClose={handleRoomInfoClose} onJoinPrivateRoom={handlePasswordOpen}/>
         </div>
       )}
 
@@ -80,8 +113,15 @@ const WatchPartyPage = () => {
             className="absolute inset-0 bg-black/50 backdrop-blur-sm transiton-all duration-300"
             onClick={() => setIsCreateRoomOpen(false)}
           ></div>
-          <CreateRoom onClose={()=>setIsCreateRoomOpen(false)}/>
+          <CreateRoom onClose={() => setIsCreateRoomOpen(false)} />
         </div>
+      )}
+
+      {password.isOpen && (
+        <PasswordPrompt
+          onJoin={handlePasswordSubmit}
+          onClose={() => setPassword({ isOpen: false, roomData: null })}
+        />
       )}
     </div>
   );

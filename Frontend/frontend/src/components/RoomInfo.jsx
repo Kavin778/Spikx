@@ -1,9 +1,28 @@
 import { XMarkIcon, ArrowLeftStartOnRectangleIcon,UserGroupIcon } from '@heroicons/react/16/solid';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 
-const RoomInfo = ({roomData,onClose}) => {
+const RoomInfo = ({roomData,onClose,onJoinPrivateRoom}) => {
   const isPublic = roomData.isPublic;
   const posterUrl = import.meta.env.VITE_TMDB_IMAGE_BASE_URL + roomData.currentMovie.poster[0];
+  const navigate = useNavigate();
+  const {user} = useAuth();
+
+  const handleJoinRoom = async () =>{
+    if(!user){
+      return;
+    }
+
+    if(!isPublic){
+      onClose();
+      onJoinPrivateRoom(roomData);
+      return;
+    }
+    else{
+      navigate(`/movie/${roomData.currentMovie.tmdbId}/${roomData.id}?watchParty=true`);
+    }
+  }
 
   return (
     <div className="w-full min-h-screen flex justify-center items-center">
@@ -50,7 +69,7 @@ const RoomInfo = ({roomData,onClose}) => {
                 <ArrowLeftStartOnRectangleIcon className="size-8 text-white mr-2 transition-all duration-300" />
                 Close
               </button>
-              <button className="bg-slate-400 text-3xl text-white group flex justify-center items-center hover:text-black hover:bg-slate-200 p-2 w-64 rounded-lg hover:cursor-pointer transition-all duration-300">
+              <button onClick={handleJoinRoom} className="bg-slate-400 text-3xl text-white group flex justify-center items-center hover:text-black hover:bg-slate-200 p-2 w-64 rounded-lg hover:cursor-pointer transition-all duration-300">
                 <UserGroupIcon className="size-8 group-hover:text-black transition-all duration-300" />
                 Join Room
               </button>

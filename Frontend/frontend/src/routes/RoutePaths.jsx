@@ -5,6 +5,7 @@ import HomePage from '../pages/HomePage';
 import MoviePage from '../pages/MoviePage';
 import ErrorPage from '../pages/ErrorPage';
 import WatchPartyPage from '../pages/WatchPartyPage';
+import PasswordPrompt from '../components/PasswordPrompt';
 
 const RoutePaths = () => {
   return (
@@ -44,6 +45,7 @@ const RoutePaths = () => {
         }
       />
       <Route path="*" element={<ErrorPage />} />
+      <Route path="/password" element={<PasswordPrompt/>}/>
     </Routes>
   );
 };

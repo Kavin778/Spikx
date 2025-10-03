@@ -41,17 +41,20 @@ const MoviePage = () => {
 
   const [movieDetails, setMovieDetails] = useState(null);
 
-  if(watchParty && roomId){
-    useEffect(() => {
-      const sockerurl = import.meta.env.VITE_SOCKET_BASE_URL;
-      socketService.connect(sockerurl);
-      socketService.joinRoom(roomId, username);
 
-      return () => {
-        socketService.disconnect();
-      };
+    useEffect(() => {
+      if(watchParty && roomId && user){
+        const sockerurl = import.meta.env.VITE_SOCKET_BASE_URL;
+        socketService.connect(sockerurl);
+        socketService.joinRoom(roomId, username);
+
+        return () => {
+          socketService.disconnect();
+        };
+      }
+      
     }, [watchParty, roomId, username]);
-  }
+
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
