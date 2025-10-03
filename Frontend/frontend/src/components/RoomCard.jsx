@@ -5,19 +5,31 @@ import {
   InformationCircleIcon,
   UserGroupIcon,
 } from '@heroicons/react/16/solid';
+import { joinRoom } from '../api/RoomService';
 
 const RoomCard = ({ roomData, onInfoClick }) => {
   const isPublic = roomData.isPublic;
 
   const navigate = useNavigate();
   const handleInfoClick = () => {
-    console.log(roomData);
     onInfoClick(roomData);
   };
-  const tmdbId = roomData.currentMovieId.tmdbId;
 
-  const handleJoinRoom = () => {
-    navigate(`/movie/${tmdbId}/${roomData.id}?watchParty=true`);
+  const tmdbId = roomData.currentMovie.tmdbId;
+
+  const handleJoinRoom = async () => {
+    if(!isPublic){
+      const response = await joinRoom(roomData);
+      if(response.success){
+        navigate(`/movie/${tmdbId}/${roomData.id}?watchParty=true`);
+      }
+      else{
+        console.error("Failed to join room ")
+      }
+    }
+    else{
+      navigate(`/movie/${tmdbId}/${roomData.id}?watchParty=true`);
+    }
   };
 
   const posterUrl = import.meta.env.VITE_TMDB_IMAGE_BASE_URL + roomData.currentMovie.poster[0];

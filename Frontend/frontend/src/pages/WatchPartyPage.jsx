@@ -19,7 +19,8 @@ const WatchPartyPage = () => {
   const handleRoomInfoClose = () => {
     setIsRoomInfo(false);
     setSelectedRoom(null);
-  };
+  }; 
+  
 
   useEffect(() => {
     const fetchRooms = async () => {
@@ -27,7 +28,7 @@ const WatchPartyPage = () => {
       setRooms(response.rooms);
     };
     fetchRooms();
-  }, [rooms]);
+  }, []);
 
   return (
     <div className="bg-black  min-h-screen w-full pt-20">
@@ -79,7 +80,7 @@ const WatchPartyPage = () => {
             className="absolute inset-0 bg-black/50 backdrop-blur-sm transiton-all duration-300"
             onClick={() => setIsCreateRoomOpen(false)}
           ></div>
-          <CreateRoom />
+          <CreateRoom onClose={()=>setIsCreateRoomOpen(false)}/>
         </div>
       )}
     </div>

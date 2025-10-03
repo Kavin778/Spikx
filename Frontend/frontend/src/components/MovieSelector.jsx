@@ -10,7 +10,6 @@ const MovieSelector = ({ onClose, onSelectMovie }) => {
     const fetchAllMovies = async() =>{
         const movies = await getAllMovies();
         setMovies(movies);
-        console.log(movies)
     }
     fetchAllMovies();
   },[])

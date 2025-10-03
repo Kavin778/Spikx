@@ -5,7 +5,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
 
-const CreateRoom = () => {
+const CreateRoom = ({onClose}) => {
   const [isPublic, setIsPublic] = useState(true);
   const [isMovieSelectorOpen, setIsMovieSelectorOpen] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -43,7 +43,6 @@ const CreateRoom = () => {
         currentMovieId: selectedMovie.id
       };
        const response = await createRoom(form)
-       console.log(response)
        navigate(`/movie/${selectedMovie.tmdbId}/${response.id}?watchParty=true`);
     }
     catch(error){
@@ -152,7 +151,7 @@ const CreateRoom = () => {
               <button
                 type="button"
                 onClick={() => setIsMovieSelectorOpen(true)}
-                className="w-full bg-blue-600 hover:bg-slate-200 hover:text-black text-white font-semibold py-3 px-4 rounded-md transition-colors duration-300"
+                className="w-full bg-gray-600 hover:bg-slate-200 hover:text-black text-white font-semibold py-3 px-4 rounded-md transition-colors duration-300"
               >
                 Select Movie
               </button>
@@ -161,6 +160,7 @@ const CreateRoom = () => {
           <div className="flex justify-center space-x-4 py-2  text-lg">
             <button
               type="button"
+              onClick={onClose}
               className="px-6 py-2 cursor-pointer w-full bg-gray-600 hover:bg-red-500 text-white font-semibold rounded-lg transition-colors duration-300"
             >
               Close

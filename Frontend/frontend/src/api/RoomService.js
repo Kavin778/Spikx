@@ -30,3 +30,13 @@ export const createRoom = async(roomData)=>{
         console.error("Error while creating room");
     }
 }
+
+export const joinRoom = async(roomData,password)=>{
+    try{
+        const response = await apiClient.post("/rooms/joinRoom",roomData.id,password);
+        return response.data
+    }
+    catch(error){
+        console.error("Failed to join the room")
+    }
+}
