@@ -29,8 +29,6 @@ export const createRoom = async roomData => {
 };
 
 export const joinRoom = async (roomData, password) => {
-    console.log(roomData);
-    console.log(password)
   try {
     const response = await apiClient.post('/rooms/joinRoom', {
       id: roomData.id,

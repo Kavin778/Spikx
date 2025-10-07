@@ -37,8 +37,8 @@ const WatchPartyPage = () => {
     const { roomData } = password;
     try {
       const response = await joinRoom(roomData, curpassword);
-      console.log(response)
-      if (response.success) {
+
+      if (response &&response.success) {
         navigate(`/movie/${roomData.currentMovie.tmdbId}/${roomData.id}?watchParty=true`);
       } else {
         console.error('Failed to join rooom');
