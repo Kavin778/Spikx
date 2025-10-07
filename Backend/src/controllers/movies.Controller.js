@@ -62,7 +62,6 @@ export const getMovie = async (req, res, next) => {
       return res.status(404).json({ message: "Movie not found" });
     }
 
-    console.log(movie.jellyfinItemId);
     const range = req.headers.range;
     const ip = LocalIpAddress();
     const jellyPort = process.env.JELLYFIN_PORT || 8096;

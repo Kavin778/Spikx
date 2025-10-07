@@ -47,12 +47,11 @@ export const getRooms = async (req, res, next) => {
 export const joinRoom = async (req, res, next) => {
   try {
     const roomData = req.body;
-
     const room = await joinRoomService(roomData);
     if (!room.success) {
+      console.log(room.success)
       return res.status(room.status).json({success:room.success, message: room.message });
     }
-
     res.status(200).json({success:room.success, message: "Succesfullt joined the room" });
   } catch (error) {
     next(error);
