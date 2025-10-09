@@ -46,8 +46,6 @@ A modern, full-stack movie streaming platform that allows users to watch movies 
 - **Heroicons** - Beautiful SVG icons
 - **Axios** - HTTP client for API requests
 - **Socket.io Client** - Real-time communication
-- **React Player** - Video player component
-- **HLS.js** - HTTP Live Streaming support
 
 ### Backend
 
